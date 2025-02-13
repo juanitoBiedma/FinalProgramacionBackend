@@ -1,4 +1,5 @@
 com\minseg\spring\repository\SentenciaRepository.class
+com\minseg\spring\config\SecurityConfig$1.class
 com\minseg\spring\repository\BandaRepository.class
 com\minseg\spring\repository\DelitoRepository.class
 com\minseg\spring\repository\VigilanteRepository.class

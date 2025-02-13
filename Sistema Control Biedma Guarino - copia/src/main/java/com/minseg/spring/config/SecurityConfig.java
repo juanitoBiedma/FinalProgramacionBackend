@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.security.config.Customizer;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -58,29 +59,34 @@ public class SecurityConfig {
                     httpSecurityCorsConfigurer.configurationSource(source);
                 })*/
                 // Deshabilitar CSRF ya que estamos trabajando con HTML y no con un framework como Thymeleaf
-                .csrf(csrf -> csrf.disable())
-                .cors(withDefaults())
+                .csrf(csrf -> csrf.disable()) 
+                //.cors(Customizer.withDefaults())
+                //.cors(CorsConfigurationSource crs)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // Permitir el uso de sesiones para manejar el login
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
-                    http.requestMatchers("http://192.168.1.8:8080/login.html", "http://192.168.1.8:8080/css/**", "http://192.168.1.8:8080/js/**", "http://192.168.1.8:8080/img/**").permitAll(); // Permitir acceso a recursos estáticos
+                    http.requestMatchers("http://localhost:3000/login.html", "http://localhost:3000/css/**", "http://localhost:3000/js/**", "http://localhost:3000/img/**").permitAll(); // Permitir acceso a recursos estáticos
                     http.requestMatchers(PERFIL_USUARIO).hasAnyRole(ROL_ADMIN, ROL_INVES, ROL_VIGI);
                     http.requestMatchers(USUARIOS, ENTIDADES, SUCURSALES, VIGILANTES, JUECES, DELITOS, DELINCUENTES, BANDAS, SENTENCIAS, SENTENCIAS_JUEZ, CONTRATOS_VIGILANTE).hasAnyRole(ROL_ADMIN, ROL_INVES);
                     http.requestMatchers(REGISTRAR_USUARIO, EDITAR_USUARIO, EDITAR_CONTRASENIA_USUARIO, REGISTRAR_ENTIDAD, EDITAR_ENTIDAD, REGISTRAR_SUCURSAL, EDITAR_SUCURSAL, REGISTRAR_VIGILANTE, EDITAR_VIGILANTE, REGISTRAR_CONTRATO, REGISTRAR_JUEZ, EDITAR_JUEZ, REGISTRAR_DELITO, EDITAR_DELITO, DELITOS_DELINCUENTE, REGISTRAR_DELINCUENTE, EDITAR_DELINCUENTE, REGISTRAR_BANDA, EDITAR_BANDA, REGISTRAR_SENTENCIA, EDITAR_SENTENCIA).hasRole(ROL_ADMIN);
                     http.anyRequest().authenticated();
                 })
+                .authorizeHttpRequests(auth -> auth
+                .anyRequest()
+                .permitAll())
                 // Login personalizado
                 .formLogin(form -> form
-                .loginPage("http://192.168.1.8:8080/login.html") // Página de login customizada
+                .loginPage("http://localhost:3000/login.html") // Página de login customizada
                 .loginProcessingUrl(AUTH_LOGIN) //Endpoint que procesa el login
-                .defaultSuccessUrl("http://192.168.1.8:8080/index.html", true) // Redirige a index tras un login exitoso
-                .failureUrl("http://192.168.1.8:8080/login.html?error=true") // En caso de error (no hace nada)
+                .defaultSuccessUrl("http://localhost:3000/index.html", true) // Redirige a index tras un login exitoso
+                .failureUrl("http://localhost:3000/login.html?error=true") // En caso de error (no hace nada)
                 .permitAll()
                 )
                 // Configuración logout
                 .logout(logout -> logout
                 .logoutUrl(LOGOUT)
-                .logoutSuccessUrl("http://192.168.1.8:8080/login.html")
+                .logoutSuccessUrl("http://localhost:3000/login.html")
                 .permitAll()
                 )
                 .exceptionHandling(exception -> exception
@@ -92,16 +98,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://192.168.1.8:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Content-Range", "Content-Disposition", "Content-Description"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://192.168.1.8:8080"));
+        configuration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
+        configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
         configuration.setMaxAge(1728000L);
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
-        return source; 
+        return source;
     }
 
     /*

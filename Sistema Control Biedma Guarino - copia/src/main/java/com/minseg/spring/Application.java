@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
 
 @SpringBootApplication
 public class Application {
@@ -48,15 +49,14 @@ public class Application {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                    .allowedOrigins("http://localhost:8080", "http://192.168.1.8:8080")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS")
-                    .allowedHeaders("Authorization", "Content-Type", "Accept", "Content-Range", "Content-Disposition", "Content-Description")
+                    .allowedOriginPatterns("http://localhost:3000", "http://192.168.1.8:8080")
+                    .allowedMethods(CorsConfiguration.ALL)
+                    .allowedHeaders(CorsConfiguration.ALL)
                     .maxAge(1728000)
                     .allowCredentials(true);
         }
     }
-    
-    /*    
+     
     @Bean
     CommandLineRunner init(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
         return args -> {
@@ -102,5 +102,4 @@ public class Application {
             usuarioRepository.saveAll(List.of(userFran, userJuan));
         };
     }
-     */
 }
