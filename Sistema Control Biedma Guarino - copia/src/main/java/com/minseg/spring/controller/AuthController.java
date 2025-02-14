@@ -19,6 +19,7 @@ import com.minseg.spring.entity.Usuario;
 import com.minseg.spring.service.RolService;
 import com.minseg.spring.service.UsuarioService;
 import static com.minseg.spring.utilities.Constantes.ERROR_ROL_NOT_FOUND;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 //@CrossOrigin(origins="http://192.168.1.8:8080")
@@ -82,16 +83,27 @@ public class AuthController {
         return "Credenciales inválidas";
     }
 
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
     @GetMapping("/usuario-logueado")
     public ResponseEntity<Usuario> obtenerUsuarioLogueado() {
-        // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         String username = authentication.getName();
+        System.out.println("Usuario autenticado: " + username);
 
         Optional<Usuario> usuarioOptional = usuarioService.buscarUsuarioPorUsername(username);
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
+
+            if (!usuario.isEnabled()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
             return ResponseEntity.ok(usuario);
         }
 

@@ -49,14 +49,14 @@ public class Application {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                    .allowedOriginPatterns("http://localhost:3000", "http://192.168.1.8:8080")
+                    .allowedOriginPatterns("http://localhost:3000", "http://192.168.1.8:8080", "http://localhost:8080")
                     .allowedMethods(CorsConfiguration.ALL)
                     .allowedHeaders(CorsConfiguration.ALL)
                     .maxAge(1728000)
                     .allowCredentials(true);
         }
     }
-     
+     /*
     @Bean
     CommandLineRunner init(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
         return args -> {
@@ -102,4 +102,5 @@ public class Application {
             usuarioRepository.saveAll(List.of(userFran, userJuan));
         };
     }
+*/
 }

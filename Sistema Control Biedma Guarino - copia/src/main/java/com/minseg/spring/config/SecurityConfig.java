@@ -66,11 +66,12 @@ public class SecurityConfig {
                 // Permitir el uso de sesiones para manejar el login
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
+                    http.requestMatchers(INFORMACION_USUARIO).permitAll();
                     http.requestMatchers("http://localhost:3000/login.html", "http://localhost:3000/css/**", "http://localhost:3000/js/**", "http://localhost:3000/img/**").permitAll(); // Permitir acceso a recursos estáticos
                     http.requestMatchers(PERFIL_USUARIO).hasAnyRole(ROL_ADMIN, ROL_INVES, ROL_VIGI);
                     http.requestMatchers(USUARIOS, ENTIDADES, SUCURSALES, VIGILANTES, JUECES, DELITOS, DELINCUENTES, BANDAS, SENTENCIAS, SENTENCIAS_JUEZ, CONTRATOS_VIGILANTE).hasAnyRole(ROL_ADMIN, ROL_INVES);
                     http.requestMatchers(REGISTRAR_USUARIO, EDITAR_USUARIO, EDITAR_CONTRASENIA_USUARIO, REGISTRAR_ENTIDAD, EDITAR_ENTIDAD, REGISTRAR_SUCURSAL, EDITAR_SUCURSAL, REGISTRAR_VIGILANTE, EDITAR_VIGILANTE, REGISTRAR_CONTRATO, REGISTRAR_JUEZ, EDITAR_JUEZ, REGISTRAR_DELITO, EDITAR_DELITO, DELITOS_DELINCUENTE, REGISTRAR_DELINCUENTE, EDITAR_DELINCUENTE, REGISTRAR_BANDA, EDITAR_BANDA, REGISTRAR_SENTENCIA, EDITAR_SENTENCIA).hasRole(ROL_ADMIN);
-                    http.anyRequest().authenticated();
+                    //http.anyRequest().authenticated();
                 })
                 .authorizeHttpRequests(auth -> auth
                 .anyRequest()
@@ -98,7 +99,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://192.168.1.8:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080", "http://192.168.1.8:8080"));
         configuration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
         configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
         configuration.setMaxAge(1728000L);

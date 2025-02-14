@@ -22,6 +22,7 @@ public class Constantes {
     public static String AUTH = "/auth";
     public static String AUTH_LOGIN = "/auth/login";
     public static String LOGOUT = "/logout";
+    public static String INFORMACION_USUARIO = "/auth/usuario-logueado";
 
     // ---ROLES---
     public static String ROL_ADMIN = "ADMINISTRADOR";
