@@ -18,7 +18,6 @@ com\minseg\spring\entity\RolEnum.class
 com\minseg\spring\repository\JuezRepository.class
 com\minseg\spring\entity\Sucursal.class
 com\minseg\spring\repository\RolRepository.class
-com\minseg\spring\controller\LogOutController.class
 com\minseg\spring\service\DelincuenteService.class
 com\minseg\spring\entity\Contrato.class
 com\minseg\spring\entity\Delito.class

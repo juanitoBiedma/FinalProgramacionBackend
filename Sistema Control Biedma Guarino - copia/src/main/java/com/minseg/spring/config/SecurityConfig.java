@@ -66,7 +66,7 @@ public class SecurityConfig {
                 // Permitir el uso de sesiones para manejar el login
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
-                    http.requestMatchers(INFORMACION_USUARIO).permitAll();
+                    http.requestMatchers(INFORMACION_USUARIO, LOGOUT).permitAll();
                     http.requestMatchers("http://localhost:3000/login.html", "http://localhost:3000/css/**", "http://localhost:3000/js/**", "http://localhost:3000/img/**").permitAll(); // Permitir acceso a recursos estáticos
                     http.requestMatchers(PERFIL_USUARIO).hasAnyRole(ROL_ADMIN, ROL_INVES, ROL_VIGI);
                     http.requestMatchers(USUARIOS, ENTIDADES, SUCURSALES, VIGILANTES, JUECES, DELITOS, DELINCUENTES, BANDAS, SENTENCIAS, SENTENCIAS_JUEZ, CONTRATOS_VIGILANTE).hasAnyRole(ROL_ADMIN, ROL_INVES);
@@ -87,10 +87,23 @@ public class SecurityConfig {
                 .permitAll()
                 )
                 // Configuración logout
-                .logout(logout -> logout
+                /*.logout(logout -> logout
                 .logoutUrl(LOGOUT)
                 .logoutSuccessUrl("http://localhost:3000/login.html")
                 .permitAll()
+                )*/
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler((HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.Authentication authentication) -> {
+                            // Si es petición AJAX, responde con 200 OK sin redirección
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            } else {
+                                // Caso contrario, redirige a la página de login
+                                response.sendRedirect("http://localhost:3000/login.html");
+                            }
+                        })
+                        .permitAll()
                 )
                 .exceptionHandling(exception -> exception
                 .accessDeniedPage(FORBIDDEN_403)
