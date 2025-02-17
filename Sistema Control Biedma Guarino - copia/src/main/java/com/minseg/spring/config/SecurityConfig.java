@@ -21,86 +21,41 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import org.springframework.security.config.Customizer;
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    /*
-    private final CorsFilter corsFilter;
-
-    public SecurityConfig(CorsFilter corsFilter) {
-        this.corsFilter = corsFilter;
-    }
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                /*.cors(httpSecurityCorsConfigurer -> {
-                    CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("http://192.168.1.8:8080"));
-                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-                    configuration.setAllowCredentials(true);
-                    // configuration.setExposedHeaders(Arrays.asList("*"));
-                    configuration.setMaxAge(3600L);
-                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                    source.registerCorsConfiguration("/**", configuration);
-                    httpSecurityCorsConfigurer.configurationSource(source);
-                })*/
                 // Deshabilitar CSRF ya que estamos trabajando con HTML y no con un framework como Thymeleaf
-                .csrf(csrf -> csrf.disable()) 
-                //.cors(Customizer.withDefaults())
-                //.cors(CorsConfigurationSource crs)
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // Permitir el uso de sesiones para manejar el login
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
-                    http.requestMatchers(INFORMACION_USUARIO, LOGOUT).permitAll();
-                    http.requestMatchers("http://localhost:3000/login.html", "http://localhost:3000/css/**", "http://localhost:3000/js/**", "http://localhost:3000/img/**").permitAll(); // Permitir acceso a recursos estáticos
+                    http.requestMatchers(INFORMACION_USUARIO, LOGOUT, AUTH_LOGIN, AUTH, AUTH_ALTA).permitAll();
+                    http.requestMatchers("https://192.168.1.3:3000/public/login.html", "https://192.168.1.3:3000/public/css/**", "https://192.168.1.3:3000/public/js/**", "https://192.168.1.3:3000/public/img/**").permitAll(); // Permitir acceso a recursos estáticos
                     http.requestMatchers(PERFIL_USUARIO).hasAnyRole(ROL_ADMIN, ROL_INVES, ROL_VIGI);
                     http.requestMatchers(USUARIOS, ENTIDADES, SUCURSALES, VIGILANTES, JUECES, DELITOS, DELINCUENTES, BANDAS, SENTENCIAS, SENTENCIAS_JUEZ, CONTRATOS_VIGILANTE).hasAnyRole(ROL_ADMIN, ROL_INVES);
                     http.requestMatchers(REGISTRAR_USUARIO, EDITAR_USUARIO, EDITAR_CONTRASENIA_USUARIO, REGISTRAR_ENTIDAD, EDITAR_ENTIDAD, REGISTRAR_SUCURSAL, EDITAR_SUCURSAL, REGISTRAR_VIGILANTE, EDITAR_VIGILANTE, REGISTRAR_CONTRATO, REGISTRAR_JUEZ, EDITAR_JUEZ, REGISTRAR_DELITO, EDITAR_DELITO, DELITOS_DELINCUENTE, REGISTRAR_DELINCUENTE, EDITAR_DELINCUENTE, REGISTRAR_BANDA, EDITAR_BANDA, REGISTRAR_SENTENCIA, EDITAR_SENTENCIA).hasRole(ROL_ADMIN);
                     http.anyRequest().authenticated();
                 })
-                
-//                .authorizeHttpRequests(auth -> auth
-//                .anyRequest()
-//                .permitAll())
-                
-                // Login personalizado
-                .formLogin(form -> form
-                .loginPage("http://localhost:3000/login.html") // Página de login customizada
-                .loginProcessingUrl(AUTH_LOGIN) //Endpoint que procesa el login
-                .defaultSuccessUrl("http://localhost:3000/index.html", true) // Redirige a index tras un login exitoso
-                .failureUrl("http://localhost:3000/login.html?error=true") // En caso de error (no hace nada)
-                .permitAll()
-                )
-                // Configuración logout
-                /*.logout(logout -> logout
-                .logoutUrl(LOGOUT)
-                .logoutSuccessUrl("http://localhost:3000/login.html")
-                .permitAll()
-                )*/
+                //Manejo de Logout
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.Authentication authentication) -> {
-                            // Si es petición AJAX, responde con 200 OK sin redirección
                             if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
                                 response.setStatus(HttpServletResponse.SC_OK);
                             } else {
-                                // Caso contrario, redirige a la página de login
-                                response.sendRedirect("http://localhost:3000/login.html");
+                                response.sendRedirect("https://192.168.1.3:3000/public/login.html");
                             }
                         })
                         .permitAll()
@@ -114,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080", "http://192.168.1.8:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("https://192.168.1.3:3000"));
         configuration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
         configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
         configuration.setMaxAge(1728000L);
@@ -125,20 +80,7 @@ public class SecurityConfig {
 
         return source;
     }
-
-    /*
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://192.168.1.8:8080"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-     */
+    
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new AuthenticationSuccessHandler() {
@@ -155,7 +97,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Configuración del proveedor de autenticación con UserDetailsServiceImpl
+    // Configuración del proveedor de autenticación
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsServiceImpl userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

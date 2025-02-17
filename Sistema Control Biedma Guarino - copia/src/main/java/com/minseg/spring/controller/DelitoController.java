@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping("/api/delitos")
 public class DelitoController {

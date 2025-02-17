@@ -28,9 +28,7 @@ import static com.minseg.spring.utilities.Constantes.ERROR_PASS_NO_COINCIDE;
 import static com.minseg.spring.utilities.Constantes.EXITO_CAMBIO_CONTRASENIA;
 import static com.minseg.spring.utilities.Constantes.NUEVA_CONTRASENIA;
 import static com.minseg.spring.utilities.Constantes.REPETIR_NUEVA_CONTRASENIA;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping({"/api/usuarios"})
 public class UsuarioController {
@@ -82,17 +80,14 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(ERROR_CAMPOS_OBLIGATORIOS);
         }
 
-        // Extraer las contraseñas del request
         String contraseniaAntigua = contrasenias.get(ANTIGUA_CONTRASENIA);
         String nuevaContrasenia = contrasenias.get(NUEVA_CONTRASENIA);
         String repetirNuevaContrasenia = contrasenias.get(REPETIR_NUEVA_CONTRASENIA);
 
-        // Verificar si las nuevas contraseñas coinciden
         if (!nuevaContrasenia.equals(repetirNuevaContrasenia)) {
             return ResponseEntity.badRequest().body(ERROR_PASS_NO_COINCIDE);
         }
 
-        // Validar la nueva contraseña
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
         if (!nuevaContrasenia.matches(regex)) {
             return ResponseEntity.badRequest().body("La nueva contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.");
@@ -112,17 +107,15 @@ public class UsuarioController {
     @DeleteMapping("/eliminarCompleto/{idUsuario}")
     public ResponseEntity<String> eliminarUsuarioCompleto(@PathVariable Long idUsuario) {
         try {
-            // Obtener el usuario
             Usuario usuario = usuarioService.obtenerUsuarioPorId(idUsuario);
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
 
-            // Verificar si es un vigilante
-            if (usuario.getRolUsuario().getId() == 3) { // Suponiendo que el rol 3 es el de vigilante
+            // Verificar si es un vigilante y si es eliminar
+            if (usuario.getRolUsuario().getId() == 3) {
                 Vigilante vigilante = vigilanteService.obtenerVigilantePorUsuarioId(idUsuario);
                 if (vigilante != null) {
-                    // Eliminar el contrato del vigilante
                     if (vigilante.isEstaContratadoVigilante()) {
                         Contrato contrato = contratoService.obtenerContratoPorVigilanteId(vigilante.getIdVigilante());
                         if (contrato != null) {
@@ -130,12 +123,10 @@ public class UsuarioController {
                         }
                     }
 
-                    // Eliminar el vigilante
                     vigilanteService.eliminarVigilante(vigilante.getIdVigilante());
                 }
             }
 
-            // Eliminar el usuario
             usuarioService.eliminarUsuario(idUsuario);
 
             return ResponseEntity.ok("Usuario, vigilante y contrato eliminados exitosamente");

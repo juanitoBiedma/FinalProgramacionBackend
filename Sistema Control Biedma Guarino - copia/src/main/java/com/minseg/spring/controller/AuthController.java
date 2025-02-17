@@ -1,5 +1,6 @@
 package com.minseg.spring.controller;
 
+import com.minseg.spring.entity.Auth;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.minseg.spring.entity.Rol;
@@ -19,10 +19,10 @@ import com.minseg.spring.entity.Usuario;
 import com.minseg.spring.service.RolService;
 import com.minseg.spring.service.UsuarioService;
 import static com.minseg.spring.utilities.Constantes.ERROR_ROL_NOT_FOUND;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -69,26 +69,38 @@ public class AuthController {
         return this.usuarioService.guardarUsuario(usuario);
     }
 
-    // REVISAR SI REALMENTE DEVUELVE LOS STRING ANTES DE LLEVAR A CONSTANTES
+    //Controlador para el logueo del usuario
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        Optional<Usuario> usuarioOptional = usuarioService.buscarUsuarioPorUsername(username);
-
+    public ResponseEntity<Auth> login(@RequestBody Auth auth, HttpServletRequest request) {
+        Optional<Usuario> usuarioOptional = usuarioService.buscarUsuarioPorUsername(auth.getUsername());
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            if (passwordEncoder.matches(password, usuario.getPassword())) {
-                return "Login exitoso";
+            if (passwordEncoder.matches(auth.getPassword(), usuario.getPassword())) {
+                // Crear un token de autenticación con las autoridades del usuario
+                Authentication token
+                        = new UsernamePasswordAuthenticationToken(
+                                usuario.getUsername(),
+                                null,
+                                usuario.getAuthorities()
+                        );
+                SecurityContextHolder.getContext().setAuthentication(token);
+
+                request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+                return ResponseEntity.ok(auth);
             }
         }
-        return "Credenciales inválidas";
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
+    //Controlador para saber qué usuario está logueado y darle los permisos correspondientes
     @GetMapping("/usuario-logueado")
     public ResponseEntity<Usuario> obtenerUsuarioLogueado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authentication: " + authentication);
 
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            System.out.println("Usuario no autenticado");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -101,11 +113,13 @@ public class AuthController {
             Usuario usuario = usuarioOptional.get();
 
             if (!usuario.isEnabled()) {
+                System.out.println("Usuario no habilitado");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
             return ResponseEntity.ok(usuario);
         }
+        System.out.println("Usuario no encontrado");
 
         return ResponseEntity.notFound().build();
     }

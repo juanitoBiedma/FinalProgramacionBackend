@@ -10,7 +10,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
+
 @RestController
 @RequestMapping("/api/vigilantes")
 public class VigilanteController {
@@ -47,12 +46,10 @@ public class VigilanteController {
     @PostMapping
     public ResponseEntity<?> crearVigilante(@RequestBody Vigilante vigilante) {
         try {
-            // Validar la edad del vigilante
             if (vigilante.getEdadVigilante() < 18 || vigilante.getEdadVigilante() > 65) {
                 return new ResponseEntity<>("Ingrese una edad válida (entre 18 y 65 años).", HttpStatus.BAD_REQUEST);
             }
 
-            // Validar el código de vigilante
             if (vigilante.getIdVigilante() < 1) {
                 return new ResponseEntity<>("Ingrese un código válido.", HttpStatus.BAD_REQUEST);
             }
@@ -69,7 +66,6 @@ public class VigilanteController {
         Vigilante vigilanteExistente = vigilanteService.obtenerVigilantePorId(idVigilante);
 
         try {
-            // Validar la edad del vigilante
             if (vigilante.getEdadVigilante() < 18 || vigilante.getEdadVigilante() > 65) {
                 return new ResponseEntity<>("Ingrese una edad válida (entre 18 y 65 años).", HttpStatus.BAD_REQUEST);
             }
@@ -90,13 +86,11 @@ public class VigilanteController {
     @DeleteMapping("/eliminarCompleto/{idUsuario}")
     public ResponseEntity<String> eliminarVigilanteCompleto(@PathVariable Long idUsuario) {
         try {
-            // Obtener el vigilante por el idUsuario
             Vigilante vigilante = vigilanteService.obtenerVigilantePorUsuarioId(idUsuario);
             if (vigilante == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vigilante no encontrado");
             }
 
-            // Eliminar el contrato del vigilante si existe
             if (vigilante.isEstaContratadoVigilante()) {
                 Contrato contrato = contratoService.obtenerContratoPorVigilanteId(vigilante.getIdVigilante());
                 if (contrato != null) {
@@ -104,10 +98,8 @@ public class VigilanteController {
                 }
             }
 
-            // Eliminar el vigilante
             vigilanteService.eliminarVigilante(vigilante.getIdVigilante());
 
-            // Finalmente, eliminar el usuario asociado al vigilante
             usuarioService.eliminarUsuario(idUsuario);
 
             return ResponseEntity.ok("Vigilante, contrato y usuario eliminados exitosamente");
@@ -134,7 +126,6 @@ public class VigilanteController {
             throw new IllegalArgumentException("Contrato con ID " + idContrato + " no encontrado");
         }
 
-        // delincuente.getDelitos().add(delito);
         return vigilanteService.guardarVigilante(vigilante);
     }
 }

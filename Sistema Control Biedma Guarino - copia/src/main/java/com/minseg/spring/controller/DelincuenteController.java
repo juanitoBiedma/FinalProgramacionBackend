@@ -13,7 +13,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping("/api/delincuentes")
 public class DelincuenteController {
@@ -53,7 +52,6 @@ public class DelincuenteController {
             delincuente.setBanda(null);
         }
 
-        // Asignación de delitos
         List<Delito> delitos = delincuente.getDelitos();
         if (delitos != null && !delitos.isEmpty()) {
             List<Delito> delitosExistentes = new ArrayList<>();
@@ -81,7 +79,6 @@ public class DelincuenteController {
             delincuenteExistente.setNombreDelincuente(delincuente.getNombreDelincuente());
             delincuenteExistente.setApellidoDelincuente(delincuente.getApellidoDelincuente());
 
-            // Asignación de delitos
             List<Delito> delitos = delincuente.getDelitos();
             if (delitos != null && !delitos.isEmpty()) {
                 List<Delito> delitosExistentes = new ArrayList<>();
@@ -97,15 +94,12 @@ public class DelincuenteController {
                 delincuenteExistente.setDelitos(new ArrayList<>());
             }
 
-            // Verificar que haya un cambio en la banda
             if (bandaAnterior != null && (nuevaBanda == null || !bandaAnterior.equals(nuevaBanda))) {
-                // Decrementar la cantidad de miembros de la banda anterior, si existe
                 bandaAnterior.setNMiembrosBanda(bandaAnterior.getNMiembrosBanda() - 1);
                 bandaService.guardarBanda(bandaAnterior);
             }
 
             if (nuevaBanda != null && (bandaAnterior == null || !nuevaBanda.equals(bandaAnterior))) {
-                // Incrementar la cantidad de miembros de la nueva banda, si existe
                 Banda banda = bandaService.obtenerBandaPorId(nuevaBanda.getIdBanda());
                 if (banda == null) {
                     throw new IllegalArgumentException(ERROR_ID_BANDA_NOT_FOUND);

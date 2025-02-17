@@ -20,6 +20,7 @@ public class Constantes {
 
     // ---ENDPOINTS DE SECURITYCONFIG---
     public static String AUTH = "/auth";
+    public static String AUTH_ALTA = "/auth";
     public static String AUTH_LOGIN = "/auth/login";
     public static String LOGOUT = "/logout";
     public static String INFORMACION_USUARIO = "/auth/usuario-logueado";
@@ -30,53 +31,53 @@ public class Constantes {
     public static String ROL_VIGI = "VIGILANTE";
 
     // ---ARCHIVOS ESTÁTICOS---
-    public static String INDEX = "/index.html";
-    public static String LOGIN = "/login.html";
-    public static String LOGIN_ERROR = "/login.html?error=true";
-    public static String FORBIDDEN_403 = "/error403.html";
-    public static String PERFIL_USUARIO = "/perfilUsuario.html";
-    public static String CARPETA_CSS = "/css/**";
-    public static String CARPETA_JS = "/js/**";
-    public static String CARPETA_IMG = "/img/**";
+    public static String INDEX = "/public/index.html";
+    public static String LOGIN = "/public/login.html";
+    public static String LOGIN_ERROR = "/public/login.html?error=true";
+    public static String FORBIDDEN_403 = "/public/error403.html";
+    public static String PERFIL_USUARIO = "/public/perfilUsuario.html";
+    public static String CARPETA_CSS = "/public/css/**";
+    public static String CARPETA_JS = "/public/js/**";
+    public static String CARPETA_IMG = "/public/img/**";
 
-    public static String USUARIOS = "/usuarios.html";
-    public static String REGISTRAR_USUARIO = "/registrarUsuario.html";
-    public static String EDITAR_USUARIO = "/editarusuario.html";
-    public static String EDITAR_CONTRASENIA_USUARIO = "/editarContrasenia.html";
+    public static String USUARIOS = "/public/usuarios.html";
+    public static String REGISTRAR_USUARIO = "/public/registrarUsuario.html";
+    public static String EDITAR_USUARIO = "/public/editarusuario.html";
+    public static String EDITAR_CONTRASENIA_USUARIO = "/public/editarContrasenia.html";
 
-    public static String ENTIDADES = "/entidades.html";
-    public static String REGISTRAR_ENTIDAD = "/registrarEntidad.html";
-    public static String EDITAR_ENTIDAD = "/editarEntidad.html";
+    public static String ENTIDADES = "/public/entidades.html";
+    public static String REGISTRAR_ENTIDAD = "/public/registrarEntidad.html";
+    public static String EDITAR_ENTIDAD = "/public/editarEntidad.html";
 
-    public static String SUCURSALES = "/sucursales.html";
-    public static String REGISTRAR_SUCURSAL = "/registrarSucursal.html";
-    public static String EDITAR_SUCURSAL = "/editarSucursal.html";
+    public static String SUCURSALES = "/public/sucursales.html";
+    public static String REGISTRAR_SUCURSAL = "/public/registrarSucursal.html";
+    public static String EDITAR_SUCURSAL = "/public/editarSucursal.html";
 
-    public static String VIGILANTES = "/vigilantes.html";
-    public static String REGISTRAR_VIGILANTE = "/registrarVigilante.html";
-    public static String EDITAR_VIGILANTE = "/editarVigilante.html";
-    public static String CONTRATOS_VIGILANTE = "/contratosVigilante.html";
-    public static String REGISTRAR_CONTRATO = "/registrarContrato.html";
+    public static String VIGILANTES = "/public/vigilantes.html";
+    public static String REGISTRAR_VIGILANTE = "/public/registrarVigilante.html";
+    public static String EDITAR_VIGILANTE = "/public/editarVigilante.html";
+    public static String CONTRATOS_VIGILANTE = "/public/contratosVigilante.html";
+    public static String REGISTRAR_CONTRATO = "/public/registrarContrato.html";
 
-    public static String JUECES = "/jueces.html";
-    public static String REGISTRAR_JUEZ = "/registrarJuez.html";
-    public static String EDITAR_JUEZ = "/editarJuez.html";
+    public static String JUECES = "/public/jueces.html";
+    public static String REGISTRAR_JUEZ = "/public/registrarJuez.html";
+    public static String EDITAR_JUEZ = "/public/editarJuez.html";
 
-    public static String DELITOS = "/delitos.html";
-    public static String REGISTRAR_DELITO = "/registrarDelito.html";
-    public static String EDITAR_DELITO = "/editarDelito.html";
-    public static String DELITOS_DELINCUENTE = "/delitosDelincuente.html";
+    public static String DELITOS = "/public/delitos.html";
+    public static String REGISTRAR_DELITO = "/public/registrarDelito.html";
+    public static String EDITAR_DELITO = "/public/editarDelito.html";
+    public static String DELITOS_DELINCUENTE = "/public/delitosDelincuente.html";
 
-    public static String DELINCUENTES = "/delincuentes.html";
-    public static String REGISTRAR_DELINCUENTE = "/registrarDelincuente.html";
-    public static String EDITAR_DELINCUENTE = "/editarDelincuente.html";
+    public static String DELINCUENTES = "/public/delincuentes.html";
+    public static String REGISTRAR_DELINCUENTE = "/public/registrarDelincuente.html";
+    public static String EDITAR_DELINCUENTE = "/public/editarDelincuente.html";
 
-    public static String BANDAS = "/bandas.html";
-    public static String REGISTRAR_BANDA = "/registrarBanda.html";
-    public static String EDITAR_BANDA = "/editarBanda.html";
+    public static String BANDAS = "/public/bandas.html";
+    public static String REGISTRAR_BANDA = "/public/registrarBanda.html";
+    public static String EDITAR_BANDA = "/public/editarBanda.html";
 
-    public static String SENTENCIAS = "/sentencias.html";
-    public static String REGISTRAR_SENTENCIA = "/registrarSentencia.html";
-    public static String EDITAR_SENTENCIA = "/editarSentencia.html";
-    public static String SENTENCIAS_JUEZ = "/sentenciasJuez.html";
+    public static String SENTENCIAS = "/public/sentencias.html";
+    public static String REGISTRAR_SENTENCIA = "/public/registrarSentencia.html";
+    public static String EDITAR_SENTENCIA = "/public/editarSentencia.html";
+    public static String SENTENCIAS_JUEZ = "/public/sentenciasJuez.html";
 }

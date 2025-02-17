@@ -2,7 +2,6 @@ package com.minseg.spring.service;
 
 import com.minseg.spring.entity.Usuario;
 import com.minseg.spring.repository.UsuarioRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<SimpleGrantedAuthority> authorityList = Collections.singletonList(authority);
 
         return new User(
-                usuario.getUsername(), // Username
-                usuario.getPassword(), // Password
-                usuario.isEnabled(), // isEnabled
-                usuario.isAccountNoExpired(), // isAccountNonExpired
-                usuario.isCredentialNoExpired(), // isCredentialsNonExpired
-                usuario.isAccountNoLocked(), // isAccountNonLocked
-                authorityList // GrantedAuthorities (roles)
+                usuario.getUsername(),
+                usuario.getPassword(),
+                usuario.isEnabled(),
+                usuario.isAccountNoExpired(),
+                usuario.isCredentialNoExpired(),
+                usuario.isAccountNoLocked(),
+                authorityList
         );
     }
 }

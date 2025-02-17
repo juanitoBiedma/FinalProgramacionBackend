@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping("/api/entidades")
 public class EntidadController {
@@ -49,7 +48,6 @@ public class EntidadController {
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @DeleteMapping("/{idEntidad}")
     public void eliminarEntidad(@PathVariable Long idEntidad) {
-        // Eliminar sucursales asociadas primero
         List<Sucursal> sucursales = sucursalService.obtenerSucursalesPorEntidad(idEntidad);
         for (Sucursal sucursal : sucursales) {
             sucursalService.eliminarSucursal(sucursal.getIdSucursal());

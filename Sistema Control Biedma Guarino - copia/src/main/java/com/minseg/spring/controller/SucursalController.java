@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.minseg.spring.utilities.Constantes.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-//@CrossOrigin(origins="http://192.168.1.8:8080")
 @RestController
 @RequestMapping("/api/sucursales")
 public class SucursalController {

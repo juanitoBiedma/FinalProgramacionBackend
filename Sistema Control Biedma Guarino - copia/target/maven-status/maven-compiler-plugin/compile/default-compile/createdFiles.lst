@@ -30,7 +30,6 @@ com\minseg\spring\entity\Rol.class
 com\minseg\spring\controller\EntidadController.class
 com\minseg\spring\service\ContratoService.class
 com\minseg\spring\service\BandaService.class
-com\minseg\spring\controller\MainController.class
 com\minseg\spring\entity\Entidad.class
 com\minseg\spring\entity\Sentencia.class
 com\minseg\spring\controller\DelitoController.class
@@ -40,11 +39,11 @@ com\minseg\spring\service\UsuarioService.class
 com\minseg\spring\entity\Rol$RolBuilder.class
 com\minseg\spring\Application.class
 com\minseg\spring\entity\Juez.class
+com\minseg\spring\entity\Auth.class
 com\minseg\spring\repository\ContratoRepository.class
 com\minseg\spring\entity\Usuario$UsuarioBuilder.class
 com\minseg\spring\controller\UsuarioController.class
 com\minseg\spring\entity\Delincuente.class
-com\minseg\spring\controller\SentenciaController.class
 com\minseg\spring\service\VigilanteService.class
 com\minseg\spring\controller\VigilanteController.class
 com\minseg\spring\controller\DelincuenteController.class

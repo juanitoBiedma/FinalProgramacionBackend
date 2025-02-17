@@ -3,7 +3,6 @@ package com.minseg.spring.service;
 import com.minseg.spring.entity.Contrato;
 import com.minseg.spring.repository.ContratoRepository;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

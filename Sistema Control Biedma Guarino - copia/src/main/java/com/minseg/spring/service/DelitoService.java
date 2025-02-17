@@ -37,7 +37,6 @@ public class DelitoService {
         List<Delincuente> delincuentes = delincuenteRepository.findAll();
         List<Sentencia> sentencias = sentenciaService.obtenerSentencias();
 
-        // Eliminar las asociaciones en la tabla intermedia
         for (Delincuente delincuente : delincuentes) {
             delincuente.getDelitos().removeIf(delito -> delito.getIdDelito().equals(idDelito));
             delincuenteRepository.save(delincuente);
