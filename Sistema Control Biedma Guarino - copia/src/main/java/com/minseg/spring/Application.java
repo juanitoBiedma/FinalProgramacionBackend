@@ -25,7 +25,7 @@ public class Application {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                    .allowedOriginPatterns("https://192.168.1.3:3000")
+                    .allowedOriginPatterns("https://192.168.1.9:3000")
                     .allowedMethods(CorsConfiguration.ALL)
                     .allowedHeaders(CorsConfiguration.ALL)
                     .maxAge(1728000)

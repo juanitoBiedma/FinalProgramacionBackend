@@ -20,7 +20,7 @@ public class Constantes {
 
     // ---ENDPOINTS DE SECURITYCONFIG---
     public static String AUTH = "/auth";
-    public static String AUTH_ALTA = "/auth";
+    public static String AUTH_ALTA = "/auth/alta";
     public static String AUTH_LOGIN = "/auth/login";
     public static String LOGOUT = "/logout";
     public static String INFORMACION_USUARIO = "/auth/usuario-logueado";

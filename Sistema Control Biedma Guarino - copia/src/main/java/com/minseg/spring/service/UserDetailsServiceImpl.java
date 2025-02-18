@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -23,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Usuario usuario = usuarioRepository.findUserEntityByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe."));
 
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_".concat(usuario.getRolUsuario().getRolEnum().name()));
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + (usuario.getRolUsuario() != null ? usuario.getRolUsuario().getRolEnum().name() : "DEFAULT"));
         List<SimpleGrantedAuthority> authorityList = Collections.singletonList(authority);
 
         return new User(

@@ -1,5 +1,7 @@
 package com.minseg.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -60,9 +62,13 @@ public class Usuario implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "idRol", nullable = false)
     private Rol rolUsuario;
-    
+
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (rolUsuario == null || rolUsuario.getRolEnum() == null) {
+            return Collections.emptyList();
+        }
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rolUsuario.getRolEnum()));
     }
 

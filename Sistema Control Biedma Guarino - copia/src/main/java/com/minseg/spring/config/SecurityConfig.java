@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
                     http.requestMatchers(INFORMACION_USUARIO, LOGOUT, AUTH_LOGIN, AUTH, AUTH_ALTA).permitAll();
-                    http.requestMatchers("https://192.168.1.3:3000/public/login.html", "https://192.168.1.3:3000/public/css/**", "https://192.168.1.3:3000/public/js/**", "https://192.168.1.3:3000/public/img/**").permitAll(); // Permitir acceso a recursos estáticos
+                    http.requestMatchers("https://192.168.1.9:3000/public/login.html", "https://192.168.1.9:3000/public/css/**", "https://192.168.1.9:3000/public/js/**", "https://192.168.1.9:3000/public/img/**").permitAll(); // Permitir acceso a recursos estáticos
                     http.requestMatchers(PERFIL_USUARIO).hasAnyRole(ROL_ADMIN, ROL_INVES, ROL_VIGI);
                     http.requestMatchers(USUARIOS, ENTIDADES, SUCURSALES, VIGILANTES, JUECES, DELITOS, DELINCUENTES, BANDAS, SENTENCIAS, SENTENCIAS_JUEZ, CONTRATOS_VIGILANTE).hasAnyRole(ROL_ADMIN, ROL_INVES);
                     http.requestMatchers(REGISTRAR_USUARIO, EDITAR_USUARIO, EDITAR_CONTRASENIA_USUARIO, REGISTRAR_ENTIDAD, EDITAR_ENTIDAD, REGISTRAR_SUCURSAL, EDITAR_SUCURSAL, REGISTRAR_VIGILANTE, EDITAR_VIGILANTE, REGISTRAR_CONTRATO, REGISTRAR_JUEZ, EDITAR_JUEZ, REGISTRAR_DELITO, EDITAR_DELITO, DELITOS_DELINCUENTE, REGISTRAR_DELINCUENTE, EDITAR_DELINCUENTE, REGISTRAR_BANDA, EDITAR_BANDA, REGISTRAR_SENTENCIA, EDITAR_SENTENCIA).hasRole(ROL_ADMIN);
@@ -55,7 +55,7 @@ public class SecurityConfig {
                             if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
                                 response.setStatus(HttpServletResponse.SC_OK);
                             } else {
-                                response.sendRedirect("https://192.168.1.3:3000/public/login.html");
+                                response.sendRedirect("https://192.168.1.9:3000/public/login.html");
                             }
                         })
                         .permitAll()
@@ -69,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://192.168.1.3:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("https://192.168.1.9:3000"));
         configuration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
         configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
         configuration.setMaxAge(1728000L);

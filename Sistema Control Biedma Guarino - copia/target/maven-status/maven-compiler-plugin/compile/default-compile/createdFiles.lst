@@ -44,6 +44,7 @@ com\minseg\spring\repository\ContratoRepository.class
 com\minseg\spring\entity\Usuario$UsuarioBuilder.class
 com\minseg\spring\controller\UsuarioController.class
 com\minseg\spring\entity\Delincuente.class
+com\minseg\spring\controller\SentenciaController.class
 com\minseg\spring\service\VigilanteService.class
 com\minseg\spring\controller\VigilanteController.class
 com\minseg\spring\controller\DelincuenteController.class
